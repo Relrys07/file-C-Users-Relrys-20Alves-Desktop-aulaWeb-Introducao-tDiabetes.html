@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Diabetes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: #e0e0e0;
+            font-family: 'Montserrat', 'Orbitron', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            text-align: center;
+            font-size: 2.6em;
+            margin-top: 38px;
+            letter-spacing: 2px;
+            color: #00ffe7;
+            text-shadow: 0 0 12px #00ffe7, 0 0 32px #2c5364;
+            font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
+        }
+        form {
+            background: rgba(44,83,100,0.92);
+            border-radius: 22px;
+            max-width: 440px;
+            margin: 36px auto 28px auto;
+            padding: 32px 32px 24px 32px;
+            box-shadow: 0 6px 32px #00ffe755;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+        label {
+            font-size: 1.25em;
+            color: #00ffe7;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 700;
+            text-shadow: 0 0 4px #00ffe7;
+        }
+        input[type="number"], input[type="datetime-local"] {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #222c36;
+            color: #00ffe7;
+            font-size: 1.18em;
+            font-family: 'Orbitron', Arial, sans-serif;
+            box-shadow: 0 2px 12px #00ffe722;
+            outline: none;
+            margin-bottom: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="number"]:focus, input[type="datetime-local"]:focus {
+            background: #2c5364;
+            color: #fff;
+        }
+        #salvar {
+            background: linear-gradient(90deg, #00ffe7 60%, #2c5364 100%);
+            color: #222c36;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 0;
+            font-size: 1.25em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #00ffe722;
+            transition: background 0.2s, transform 0.2s;
+            margin-top: 10px;
+            font-family: 'Orbitron', Arial, sans-serif;
+            letter-spacing: 2px;
+            width: 100%;
+        }
+        #salvar:hover {
+            background: linear-gradient(90deg, #2c5364 60%, #00ffe7 100%);
+            color: #fff;
+            transform: scale(1.06);
+        }
+        #baixar-pdf {
+            background: linear-gradient(90deg, #00ffe7 60%, #2c5364 100%);
+            color: #222c36;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 1.15em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #00ffe722;
+            transition: background 0.2s, transform 0.2s;
+            margin: 0 auto 24px auto;
+            display: block;
+            width: 220px;
+            font-family: 'Orbitron', Arial, sans-serif;
+            letter-spacing: 2px;
+        }
+        #baixar-pdf:hover {
+            background: linear-gradient(90deg, #2c5364 60%, #00ffe7 100%);
+            color: #fff;
+            transform: scale(1.06);
+        }
+        table {
+            border-collapse: collapse;
+            width: 94%;
+            margin: 0 auto 38px auto;
+            background: rgba(44,83,100,0.92);
+            border-radius: 22px;
+            box-shadow: 0 2px 24px #00ffe722;
+            overflow: hidden;
+        }
+        th, td {
+            border: none;
+            padding: 16px 10px;
+            text-align: center;
+            font-size: 1.22em;
+            font-family: 'Montserrat', Arial, sans-serif;
+            word-break: break-word;
+        }
+        th {
+            background: linear-gradient(90deg, #00ffe7 60%, #2c5364 100%);
+            color: #222c36;
+            font-size: 1.28em;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-shadow: 0 0 4px #00ffe7;
+        }
+        tr:nth-child(even) td {
+            background: #222c36;
+        }
+        tr:nth-child(odd) td {
+            background: #2c5364;
+        }
+        @media (max-width: 700px) {
+            form, table { width: 99%; padding: 8px; }
+            h2 { font-size: 1.5em; }
+            th, td { font-size: 1em; padding: 10px 4px; }
+            #baixar-pdf { width: 98%; }
+        }
+        input[type="number"], input[type="datetime-local"] {
+            border: 2px solid #00ffe7;
+            box-shadow: 0 0 8px #00ffe7, 0 0 16px #2c5364 inset;
+        }
+        input[type="number"]:focus, input[type="datetime-local"]:focus {
+            border: 2px solid #fff;
+            box-shadow: 0 0 12px #00ffe7, 0 0 24px #2c5364 inset;
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <h2>Controle de Diabetes</h2>
+    <form id="formDiabetes">
+        <label>Data e Hora:</label>
+        <input type="datetime-local" id="dataHora" required readonly>
+        <label>Glicemia (mg/dL):</label>
+        <input type="number" id="glicemia" required min="0">
+        <button type="submit" id="salvar">Salvar</button>
+    </form>
+    <button id="baixar-pdf">Baixar Tabela em PDF</button>
+    <table id="tabelaDiabetes">
+        <thead>
+            <tr>
+                <th>Data e Hora</th>
+                <th>Glicemia (mg/dL)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        // Atualiza data/hora automaticamente
+        function setDataHoraAtual() {
+            const agora = new Date();
+            const pad = n => n.toString().padStart(2, '0');
+            const local = agora.getFullYear() + '-' +
+                pad(agora.getMonth() + 1) + '-' +
+                pad(agora.getDate()) + 'T' +
+                pad(agora.getHours()) + ':' +
+                pad(agora.getMinutes());
+            document.getElementById('dataHora').value = local;
+        }
+
+        // Carregar dados salvos
+        function carregarDados() {
+            const dados = JSON.parse(localStorage.getItem('diabetesDados') || '[]');
+            const tbody = document.querySelector('#tabelaDiabetes tbody');
+            tbody.innerHTML = '';
+            dados.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${item.dataHora}</td><td>${item.glicemia}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Salvar novo registro
+        document.getElementById('formDiabetes').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const dataHora = document.getElementById('dataHora').value.replace('T', ' ');
+            const glicemia = document.getElementById('glicemia').value;
+            const dados = JSON.parse(localStorage.getItem('diabetesDados') || '[]');
+            dados.push({ dataHora, glicemia });
+            localStorage.setItem('diabetesDados', JSON.stringify(dados));
+            carregarDados();
+            this.reset();
+            setDataHoraAtual();
+        });
+
+        // Baixar tabela em PDF
+        document.getElementById('baixar-pdf').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFont("Montserrat", "bold");
+            doc.setFontSize(18);
+            doc.text("Controle de Diabetes", 15, 20);
+
+            doc.setFontSize(13);
+            doc.text("Data e Hora", 15, 35);
+            doc.text("Glicemia (mg/dL)", 90, 35);
+
+            let y = 45;
+            const dados = JSON.parse(localStorage.getItem('diabetesDados') || '[]');
+            dados.forEach(item => {
+                doc.text(item.dataHora, 15, y);
+                doc.text(item.glicemia.toString(), 90, y);
+                y += 10;
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
+            });
+
+            if (dados.length === 0) {
+                doc.text("Nenhum registro salvo.", 15, 45);
+            }
+
+            doc.save("controle-diabetes.pdf");
+        });
+
+        // Inicializa data/hora e tabela ao carregar
+        window.onload = function() {
+            setDataHoraAtual();
+            carregarDados();
+        };
+
+        const CACHE_NAME = "diabetes-app-v1";
+        const urlsToCache = [
+          "tDiabetes.html",
+          "manifest.json",
+          "icon-192.png",
+          "icon-512.png"
+          // Adicione outros arquivos como CSS, JS, fontes, etc.
+        ];
+
+        self.addEventListener("install", event => {
+          event.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+          );
+        });
+
+        self.addEventListener("fetch", event => {
+          event.respondWith(
+            caches.match(event.request).then(response => response || fetch(event.request))
+          );
+        });
+    </script>
+    <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(reg => console.log("Service Worker registrado!", reg))
+      .catch(err => console.log("Service Worker falhou:", err));
+  });
+}
+</script>
+</body>
+</html>
